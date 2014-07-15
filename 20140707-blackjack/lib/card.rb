@@ -1,4 +1,5 @@
 require 'pry'
+require 'humanize'
 
 class Card
   attr_reader :rank, :suit
@@ -8,6 +9,18 @@ class Card
 
     @suit = card_params(params)[:suit]
     @rank = card_params(params)[:rank]
+  end
+
+  def to_s
+    higher_ranks = {'J' => 'Jack', 'Q' => 'Queen', 'K' => 'King', 'A' => 'Ace'}
+
+    if @rank.kind_of?(String)
+      rank_word = higher_ranks[@rank]
+    else
+      rank_word = @rank.humanize.capitalize
+    end
+
+    "#{rank_word} of #{@suit}"
   end
 
   private

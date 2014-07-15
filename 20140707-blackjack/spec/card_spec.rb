@@ -1,11 +1,12 @@
 require_relative '../lib/card'
+require 'humanize'
 
 describe Card do
+  let(:suits) { ['Hearts', 'Spades', 'Clubs', 'Diamonds'] }
+  let(:ranks) { (2..10).to_a + %w{J Q K A}}
 
   context 'new' do
     let(:rand_card) { Card.new }
-    let(:suits) { ['Hearts', 'Spades', 'Clubs', 'Diamonds'] }
-    let(:ranks) { (2..10).to_a + %w{J Q K A}}
     let(:rank_num_to_string) { {'11' => 'J', '12' => 'Q', '13' => 'K', '14' => 'A', '1' => 'A'} }
 
 
@@ -58,6 +59,24 @@ describe Card do
 
     end
 
+  end
+
+  context '.to_s' do
+    let(:rank_names) {
+      names = {}
+      (2..10).each {|n| names.merge!({ n.to_s => n.humanize.capitalize })}
+      names.merge!({"J" => "Jack", "Q" => "Queen", "K" => "King", "A" => "Ace"})
+    }
+
+    it 'should return a readable string of the card' do
+      ranks.each do |r|
+        suits.each do |s|
+          card = Card.new(rank: r, suit: s)
+
+          expect(card.to_s).to eq("#{rank_names[r.to_s]} of #{s}")
+        end
+      end
+    end
   end
 
 end
