@@ -5,8 +5,6 @@ class Card
   attr_reader :rank, :suit
 
   def initialize params={rank:nil,suit:nil}
-    suits = ['hearts', 'spades', 'clubs', 'diamonds']
-
     @suit = card_params(params)[:suit]
     @rank = card_params(params)[:rank]
   end
@@ -15,11 +13,14 @@ class Card
     higher_ranks = {'J' => 'Jack', 'Q' => 'Queen', 'K' => 'King', 'A' => 'Ace'}
 
     if @rank.kind_of?(String)
+      # if rank is of a higher rank, therefore a string
       rank_word = higher_ranks[@rank]
     else
+      # if it's a number, humanize and capitalize it
       rank_word = @rank.humanize.capitalize
     end
 
+    # return formatted string
     "#{rank_word} of #{@suit}"
   end
 
@@ -43,8 +44,10 @@ class Card
     end
 
     if params[:suit].nil?
+      # set suit to random item if param is nil
       output[:suit] = suits.sample.capitalize
     elsif params[:suit].kind_of?(String) && suits.include?(params[:suit].downcase)
+      # set suit to capitalized input if it's included in verified set
       output[:suit] = params[:suit].capitalize
     end
 
