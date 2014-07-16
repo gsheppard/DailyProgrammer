@@ -4,6 +4,11 @@ require 'humanize'
 describe Card do
   let(:suits) { ['Hearts', 'Spades', 'Clubs', 'Diamonds'] }
   let(:ranks) { (2..10).to_a + %w{J Q K A}}
+  let(:rank_names) {
+    names = {}
+    (2..10).each {|n| names.merge!({ n.to_s => n.humanize.capitalize })}
+    names.merge!({"J" => "Jack", "Q" => "Queen", "K" => "King", "A" => "Ace"})
+  }
 
   context 'new' do
     let(:rand_card) { Card.new }
@@ -59,15 +64,21 @@ describe Card do
 
     end
 
+    it 'should create a valid card when ID is given' do
+      deck = (1..52).to_a.map { |n| Card.new(id: n+1).to_s }
+
+      rank_names.values.each do |r|
+        suits.each do |s|
+          deck -= ["#{r} of #{s}"]
+        end
+      end
+
+      expect(deck).to be_empty
+    end
+
   end
 
   context '.to_s' do
-    let(:rank_names) {
-      names = {}
-      (2..10).each {|n| names.merge!({ n.to_s => n.humanize.capitalize })}
-      names.merge!({"J" => "Jack", "Q" => "Queen", "K" => "King", "A" => "Ace"})
-    }
-
     it 'should return a readable string of the card' do
       ranks.each do |r|
         suits.each do |s|
