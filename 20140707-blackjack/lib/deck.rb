@@ -1,3 +1,5 @@
+require_relative './card'
+
 class Deck
   attr_reader :cards
 
@@ -10,8 +12,8 @@ class Deck
     drawn.count == 1 ? drawn.first : drawn
   end
 
-  def shuffle
-    @cards.shuffle!
+  def shuffle times=1
+    times.times { |n| @cards.shuffle! }
   end
 
 end
